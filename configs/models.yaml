@@ -1,0 +1,123 @@
+# Machine Learning Models Configuration
+
+# Target Variable
+target:
+  task: classification  # classification or regression
+  type: binary_direction  # binary_direction, multi_direction, or returns
+  horizon: 1  # Periods ahead to predict
+  threshold: 0.001  # For multi-class (0.1%)
+
+# Train/Validation/Test Split
+split:
+  test_size: 0.2  # 20% for testing
+  val_size: 0.2   # 20% of remaining for validation
+  method: temporal  # temporal (no shuffle) or time_series_cv
+
+# Feature Engineering
+features:
+  exclude_columns:
+    - timestamp
+    - open
+    - high
+    - low
+    - close
+    - volume
+  
+  scale_features: true
+  handle_missing: drop  # drop or forward_fill
+
+# Baseline Models
+baseline:
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000
+    class_weight: balanced
+  
+  random_forest_classifier:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 5
+    min_samples_leaf: 2
+    class_weight: balanced
+  
+  linear_regression:
+    fit_intercept: true
+  
+  random_forest_regressor:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 5
+    min_samples_leaf: 2
+
+# Advanced Models
+boosting:
+  xgboost_classifier:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: 1.0
+    early_stopping_rounds: 10
+  
+  xgboost_regressor:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    early_stopping_rounds: 10
+  
+  lightgbm_classifier:
+    n_estimators: 100
+    max_depth: -1
+    num_leaves: 31
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    is_unbalance: true
+    early_stopping_rounds: 10
+  
+  lightgbm_regressor:
+    n_estimators: 100
+    max_depth: -1
+    num_leaves: 31
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    early_stopping_rounds: 10
+
+# Evaluation
+evaluation:
+  classification_metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+    - log_loss
+  
+  regression_metrics:
+    - mae
+    - mse
+    - rmse
+    - r2
+    - directional_accuracy
+  
+  save_predictions: true
+  save_feature_importance: true
+
+# Model Selection
+selection:
+  primary_metric: accuracy  # For classification
+  #primary_metric: rmse  # For regression
+  higher_is_better: true
+  
+  # Save top N models
+  save_top_n: 3
+
+# Output
+output:
+  models_dir: models
+  predictions_dir: predictions
+  metrics_dir: metrics

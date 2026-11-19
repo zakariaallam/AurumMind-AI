@@ -1,0 +1,135 @@
+# Feature Engineering Configuration
+
+technical_indicators:
+  # Moving Averages
+  sma_periods:
+    - 20    # Short-term
+    - 50    # Medium-term
+    - 200   # Long-term trend
+  
+  ema_periods:
+    - 9     # Very short-term
+    - 20    # Short-term
+    - 50    # Medium-term
+    - 200   # Long-term trend
+  
+  # Momentum Indicators
+  rsi:
+    period: 14
+    overbought: 70
+    oversold: 30
+  
+  macd:
+    fast_period: 12
+    slow_period: 26
+    signal_period: 9
+  
+  # Volatility Indicators
+  bollinger_bands:
+    period: 20
+    num_std: 2.0
+  
+  atr:
+    period: 14
+  
+  # Trend Indicators
+  adx:
+    period: 14
+    strong_trend: 25
+  
+  # Oscillators
+  stochastic:
+    k_period: 14
+    d_period: 3
+    overbought: 80
+    oversold: 20
+  
+  # Rate of Change
+  roc:
+    period: 12
+  
+  # Volume
+  obv:
+    include: true
+
+price_action:
+  # Returns
+  return_periods:
+    - 1   # 1-period return
+    - 3   # 3-period return
+    - 5   # 5-period return
+    - 10  # 10-period return
+    - 20  # 20-period return
+  
+  # Rolling Statistics
+  rolling_windows:
+    - 5   # Very short-term
+    - 10  # Short-term
+    - 20  # Medium-term
+  
+  # Momentum
+  momentum_periods:
+    - 3
+    - 5
+    - 10
+    - 20
+  
+  # Market Structure
+  market_structure:
+    lookback: 5
+    enable_higher_highs_lows: true
+    enable_support_resistance: true
+  
+  # Support & Resistance
+  support_resistance:
+    window: 20
+    num_levels: 3
+    proximity_threshold: 0.01  # 1%
+  
+  # Volatility Features
+  volatility:
+    windows:
+      - 5
+      - 10
+      - 20
+
+# Feature Selection
+feature_selection:
+  # Remove highly correlated features
+  remove_correlated: true
+  correlation_threshold: 0.95
+  
+  # Remove low variance features
+  remove_low_variance: false
+  variance_threshold: 0.01
+  
+  # Feature importance filtering (after model training)
+  use_feature_importance: false
+  importance_threshold: 0.01
+
+# Data Handling
+data_handling:
+  # How to handle missing values
+  missing_values: forward_fill  # Options: forward_fill, drop, interpolate, none
+  
+  # Minimum rows required after feature generation
+  min_required_rows: 200
+  
+  # Drop initial rows with NaN from indicators
+  drop_initial_nan: true
+  max_initial_nan: 200
+
+# Output Settings
+output:
+  # Save features as Parquet
+  format: parquet
+  
+  # Include metadata
+  save_metadata: true
+  
+  # Compression
+  compression: snappy
+  
+  # Feature naming
+  prefix_technical: ""
+  prefix_price_action: ""
