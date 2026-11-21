@@ -96,7 +96,7 @@ AurumMind AI is a research platform for Gold (XAUUSD) market data analysis and p
 - PyTorch is declared as a project dependency but is not used by the current operational training workflow
 
 ### Operational services
-- FastAPI, Streamlit, SQLite, and a local scheduled worker
+- FastAPI, SQLite, a local scheduled worker, and a React/Vite frontend
 
 MLflow and Apache Airflow are declared project dependencies, but the current operational workflow does not integrate with them. It uses SQLite for state/jobs and a local worker process.
 
@@ -126,7 +126,8 @@ aurummind-ai/
 │   ├── evaluation/      # Model evaluation & validation ✅
 │   ├── platform/        # Provider-backed operational forecasting workflow
 │   └── utils/           # Utility functions ✅
-├── app.py               # Streamlit operational dashboard
+├── frontend/            # React/Vite operational dashboard
+├── app.py               # Legacy Streamlit dashboard
 ├── docs/                # Project audit and operational guide
 ├── notebooks/           # Jupyter notebooks for EDA ✅
 ├── tests/               # Unit and integration tests ✅
@@ -359,7 +360,7 @@ pytest tests/unit/test_data_loader.py -v
 - [ ] **Phase 7: MLOps** - MLflow, model registry, versioning
 - [ ] **Phase 8: Orchestration** - Airflow DAGs, scheduling
 - [ ] **Phase 9: API** - FastAPI REST endpoints
-- [ ] **Phase 10: Dashboard** - Streamlit interactive UI
+- [x] **Phase 10: Dashboard** - React/Vite interactive UI
 - [ ] **Phase 11: Testing & Deployment** - Docker, CI/CD
 
 ## Contributing

@@ -28,6 +28,7 @@ validation:
   allow_negative_prices: false
   require_unique_timestamps: true
 
+
 features:
   technical_indicators:
     sma_periods: [20, 50, 200]
@@ -55,3 +56,6 @@ features:
   handling:
     missing_values: forward_fill  # forward_fill, drop, or interpolate
     min_required_rows: 200
+
+
+

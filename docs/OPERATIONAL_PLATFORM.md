@@ -43,7 +43,7 @@ uv venv
 uv pip install -e .
 ```
 
-The project manifest also includes large dependencies for other research areas (including PyTorch and Airflow). The operational workflow itself uses the provider client, pandas/NumPy, PyArrow, scikit-learn, XGBoost, LightGBM, Optuna, FastAPI, and Streamlit.
+The project manifest also includes large dependencies for other research areas (including PyTorch and Airflow). The operational workflow itself uses the provider client, pandas/NumPy, PyArrow, scikit-learn, XGBoost, LightGBM, Optuna, FastAPI, and the React/Vite frontend.
 
 Historical download requires an explicit confirmation because the default range can be large:
 
@@ -87,7 +87,28 @@ uv run aurummind data update
 uv run aurummind worker --once
 ```
 
-Run the dashboard with `uv run streamlit run app.py`. The dashboard can start/stop the verified local worker and queue data, validation, feature, and training jobs. The worker polls at the configured interval, never starts a large history download, and retrains only when its configured data/time conditions are met. It runs Optuna optimization when the configured optimization interval is due; the first eligible worker training may therefore run the configured trial budget.
+## React frontend
+
+The browser UI is in `frontend/` and talks to the local FastAPI service. It includes market history and latest-forecast views, model metrics and registry/rollback controls, data quality and provenance, prediction history, explicit download/validation/feature/training actions, scheduled-worker controls, and safe runtime settings.
+
+Start the API in one terminal. Set a local bearer token first; write operations remain disabled if it is missing:
+
+```bash
+export AURUMMIND_API_TOKEN="choose-a-local-token"
+uv run aurummind api
+```
+
+In another terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the Vite URL printed in the terminal (normally `http://localhost:5173`), then enter the same bearer token in **Settings**. The frontend calls `http://127.0.0.1:8000` by default; set `VITE_API_URL` before starting Vite to use a different API URL. Configure `AURUMMIND_CORS_ORIGINS` on the API if using a non-default frontend origin. For example, `AURUMMIND_CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173`.
+
+The worker polls at the configured interval, never starts a large history download, and retrains only when its configured data/time conditions are met. It runs Optuna optimization when the configured optimization interval is due; the first eligible worker training may therefore run the configured trial budget.
 
 ## API and security
 
@@ -97,7 +118,7 @@ Start the API locally with:
 uv run aurummind api
 ```
 
-It binds to `127.0.0.1` by default. Read-only endpoints include `/api/health`, `/api/market/latest`, `/api/market/history`, `/api/prediction/latest`, `/api/prediction/history`, `/api/models/champion`, `/api/models/metrics`, `/api/data/status`, and `/api/jobs`. State-changing routes require a bearer token in `AURUMMIND_API_TOKEN`; without it, writes are disabled. Keep the token out of source control and do not expose the API publicly without an independently reviewed deployment/authentication design.
+It binds to `127.0.0.1` by default. Read-only endpoints include `/api/health`, `/api/market/latest`, `/api/market/history`, `/api/prediction/latest`, `/api/prediction/history`, `/api/models`, `/api/models/champion`, `/api/models/metrics`, `/api/features/status`, `/api/data/status`, `/api/jobs`, `/api/worker`, and `/api/settings`. State-changing routes require a bearer token in `AURUMMIND_API_TOKEN`; without it, writes are disabled. Keep the token out of source control and do not expose the API publicly without an independently reviewed deployment/authentication design.
 
 The champion is trained on the configured primary timeframe. Prediction requests for other timeframes are explicitly marked unavailable rather than applying a model to a timeframe on which it was not trained.
 
