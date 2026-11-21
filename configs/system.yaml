@@ -1,0 +1,60 @@
+application:
+  instrument: XAUUSD
+  provider: dukascopy
+  timezone: UTC
+  database_path: data/state/aurummind.sqlite3
+  reports_dir: data/reports
+  artifacts_dir: models/registry
+
+market_data:
+  primary_timeframe: M15
+  supported_timeframes: [M5, M15, H1, H4]
+  historical_start: "2020-01-01"
+  raw_dir: data/raw/dukascopy/XAUUSD
+  processed_dir: data/processed/dukascopy/XAUUSD
+  request_chunk_days: 7
+  request_pause_seconds: 0.25
+  request_timeout_seconds: 30
+  completed_candle_delay_seconds: 5
+  minimum_quality_score: 90
+  maximum_gap_fraction: 0.05
+
+features:
+  version: "m15-v1"
+  rsi_periods: [7, 14, 21]
+  ema_periods: [9, 20, 50, 100, 200]
+  sma_periods: [20, 50]
+  atr_periods: [7, 14]
+  return_periods: [1, 2, 3, 4, 8, 16]
+  rolling_periods: [5, 10, 20, 50]
+  neutral_atr_multiplier: 0.1
+  estimated_round_trip_cost_bps: 4.0
+  minimum_training_rows: 1000
+
+training:
+  random_seed: 42
+  forecast_horizon_minutes: 15
+  validation_fraction: 0.15
+  test_fraction: 0.15
+  walk_forward_splits: 5
+  maximum_optuna_trials: 20
+  signal_probability_threshold: 0.45
+  minimum_validation_macro_f1: 0.35
+  maximum_validation_brier_score: 0.75
+  minimum_promotion_improvement: 0.01
+  model_families: [logistic_regression, random_forest, xgboost, lightgbm]
+
+backtest:
+  spread_bps: 2.0
+  commission_bps: 0.0
+  slippage_bps: 1.0
+  position_size_fraction: 1.0
+  maximum_position_fraction: 1.0
+  allow_overlapping_positions: false
+
+worker:
+  update_poll_seconds: 60
+  monitoring_interval_hours: 24
+  retrain_min_new_candles: 672
+  retrain_interval_days: 7
+  optimization_interval_days: 30

@@ -7,7 +7,7 @@
 
 ## Overview
 
-AurumMind AI is a production-grade artificial intelligence platform dedicated to Gold (XAUUSD) market research and probabilistic forecasting. The system analyzes historical market data, detects statistical patterns, studies market regimes, and develops Machine Learning and Deep Learning models to estimate possible future market movements.
+AurumMind AI is a research platform for Gold (XAUUSD) market data analysis and probabilistic forecasting. It contains an offline research workflow built around bundled synthetic examples and an opt-in operational workflow that downloads provider candles, trains and evaluates machine-learning classifiers, and serves forecasts. The current operational workflow does not train deep-learning/neural-network models.
 
 **Important:** This platform is strictly educational and research-oriented. It does NOT execute financial transactions, connect to live order execution, or generate personalized real-money trading instructions.
 
@@ -91,24 +91,26 @@ AurumMind AI is a production-grade artificial intelligence platform dedicated to
 - **Pydantic** - Data validation
 - **YAML** - Configuration management
 
-### Machine Learning (upcoming phases)
-- Scikit-learn, XGBoost, LightGBM
-- PyTorch for deep learning
+### Machine Learning
+- Scikit-learn, XGBoost, LightGBM, and Optuna for the operational M15 classifiers
+- PyTorch is declared as a project dependency but is not used by the current operational training workflow
 
-### MLOps (upcoming phases)
-- MLflow for experiment tracking
-- Apache Airflow for orchestration
+### Operational services
+- FastAPI, Streamlit, SQLite, and a local scheduled worker
 
-### Deployment (upcoming phases)
-- FastAPI for REST API
-- Streamlit for dashboard
-- Docker & Docker Compose
+MLflow and Apache Airflow are declared project dependencies, but the current operational workflow does not integrate with them. It uses SQLite for state/jobs and a local worker process.
+
+## Current Operational XAUUSD Workflow
+
+The operational path defaults to 15-minute (M15) XAU/USD BID candles from Dukascopy. The checked-in sample CSVs remain synthetic and are never accepted as training data by this workflow. Data is downloaded only after an explicit confirmation; live provider access, a model fit, and forecast performance have not been verified by this README.
+
+See [the operational platform guide](docs/OPERATIONAL_PLATFORM.md) for data provenance, architecture, commands, API, training/evaluation behavior, and limitations.
 
 ## Architecture
 
 ```
 aurummind-ai/
-├── configs/              # YAML configuration files
+├── configs/              # YAML configuration files, including system.yaml
 ├── data/
 │   ├── raw/             # Raw ingested data (Parquet)
 │   ├── interim/         # Intermediate processed data
@@ -122,7 +124,10 @@ aurummind-ai/
 │   ├── features/        # Feature engineering ✅
 │   ├── models/          # Machine learning models ✅
 │   ├── evaluation/      # Model evaluation & validation ✅
+│   ├── platform/        # Provider-backed operational forecasting workflow
 │   └── utils/           # Utility functions ✅
+├── app.py               # Streamlit operational dashboard
+├── docs/                # Project audit and operational guide
 ├── notebooks/           # Jupyter notebooks for EDA ✅
 ├── tests/               # Unit and integration tests ✅
 └── scripts/             # Utility scripts ✅

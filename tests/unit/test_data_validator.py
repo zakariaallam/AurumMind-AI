@@ -12,7 +12,7 @@ from aurummind_ai.validation.data_validator import DataValidator
 @pytest.fixture
 def valid_ohlcv_data():
     """Create valid OHLCV data for testing."""
-    timestamps = pd.date_range("2024-01-01", periods=10, freq="1H", tz="UTC")
+    timestamps = pd.date_range("2024-01-01", periods=10, freq="1h", tz="UTC")
     data = {
         "timestamp": timestamps,
         "open": [2050.0 + i for i in range(10)],
@@ -140,7 +140,7 @@ def test_detect_price_jumps(valid_ohlcv_data, sample_metadata):
 def test_detect_missing_candles(sample_metadata):
     """Test detection of missing candles in time series."""
     # Create data with missing candles
-    timestamps = pd.date_range("2024-01-01", periods=5, freq="1H", tz="UTC")
+    timestamps = pd.date_range("2024-01-01", periods=5, freq="1h", tz="UTC")
     # Skip timestamp at index 2
     timestamps_with_gap = timestamps[[0, 1, 3, 4]]
     

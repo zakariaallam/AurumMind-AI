@@ -29,10 +29,13 @@ dependencies = [
     "apache-airflow>=2.8.0",
     "psycopg2-binary>=2.9.0",
     "shap>=0.44.0",
+    "dukascopy-python>=7.0.0,<8.0.0",
+    "optuna>=4.0.0",
 ]
 
 [project.scripts]
 aurummind-ai = "aurummind_ai:main"
+aurummind = "aurummind_ai.cli:main"
 
 [tool.ruff]
 line-length = 100

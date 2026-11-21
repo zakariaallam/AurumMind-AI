@@ -243,7 +243,7 @@ class DataValidator:
         
         # Map timeframe to pandas frequency
         freq_map = {
-            "1h": "1H",
+            "1h": "1h",
             "4h": "4H",
             "1d": "1D",
         }

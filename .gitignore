@@ -47,6 +47,11 @@ data/processed/*.csv
 data/processed/*.parquet
 !data/raw/samples/
 data/external/
+data/state/
+data/raw/dukascopy/
+data/processed/dukascopy/
+data/reports/
+models/
 
 # Notebooks checkpoints
 .ipynb_checkpoints/

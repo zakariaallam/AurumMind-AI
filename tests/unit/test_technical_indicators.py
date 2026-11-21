@@ -12,7 +12,7 @@ def sample_ohlcv_data():
     """Create sample OHLCV data for testing."""
     np.random.seed(42)
     
-    dates = pd.date_range("2024-01-01", periods=200, freq="1H", tz="UTC")
+    dates = pd.date_range("2024-01-01", periods=200, freq="1h", tz="UTC")
     prices = 2050 + np.cumsum(np.random.randn(200) * 2)
     
     data = {
