@@ -60,6 +60,10 @@ class TimeframeRequest(BaseModel):
     timeframe: Literal["M5", "M15", "H1", "H4"] = "M15"
 
 
+class ConfirmationRequest(BaseModel):
+    confirm: bool = False
+
+
 def _authorize(authorization: str | None) -> None:
     """Protect state-changing operations with a server-side bearer token."""
     expected = os.environ.get("AURUMMIND_API_TOKEN")
@@ -374,9 +378,15 @@ def training_start(
 
 @app.post("/api/training/optimize", status_code=202)
 def training_optimize(
+    request: ConfirmationRequest,
     authorization: str | None = Header(default=None),
 ) -> dict[str, str]:
     _authorize(authorization)
+    if not request.confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="Optuna optimization requires explicit confirm=true.",
+        )
     return _submit(
         "api_optimization",
         lambda: TrainingService(config, database, registry).train_saved(True),
